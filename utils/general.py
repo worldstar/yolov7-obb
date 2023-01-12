@@ -181,6 +181,21 @@ def check_dataset(dict):
             else:
                 raise Exception('Dataset not found.')
 
+def check_python(minimum='3.6.2'):
+    # Check current python version vs. required python version
+    check_version(platform.python_version(), minimum, name='Python ', hard=True)
+
+
+def check_version(current='0.0.0', minimum='0.0.0', name='version ', pinned=False, hard=False, verbose=False):
+    # Check version vs. required version
+    current, minimum = (pkg.parse_version(x) for x in (current, minimum))
+    result = (current == minimum) if pinned else (current >= minimum)  # bool
+    s = f'{name}{minimum} required by YOLOv5, but {name}{current} is currently installed'  # string
+    if hard:
+        assert result, s  # assert min requirements met
+    if verbose and not result:
+        LOGGER.warning(s)
+    return 
 
 def make_divisible(x, divisor):
     # Returns x evenly divisible by divisor
