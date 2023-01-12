@@ -243,36 +243,38 @@ def train(hyp, opt, device, tb_writer=None):
         logger.info('Using SyncBatchNorm()')
 
     # Trainloader
-    dataloader, dataset = create_dataloader(train_path, imgsz, batch_size, gs, opt,
-                                            hyp=hyp, augment=True, cache=opt.cache_images, rect=opt.rect, rank=rank,
-                                            world_size=opt.world_size, workers=opt.workers,
-                                            image_weights=opt.image_weights, quad=opt.quad, prefix=colorstr('train: '))
-    mlc = np.concatenate(dataset.labels, 0)[:, 0].max()  # max label class
+    dataloader, dataset = create_dataloader(train_path, imgsz, batch_size // WORLD_SIZE, gs, names, single_cls,
+                                              hyp=hyp, augment=True, cache=opt.cache, rect=opt.rect, rank=LOCAL_RANK,
+                                              workers=workers, image_weights=opt.image_weights, quad=opt.quad,
+                                              prefix=colorstr('train: '), shuffle=True)
+    mlc = int(np.concatenate(dataset.labels, 0)[:, 0].max())  # max label class
     nb = len(dataloader)  # number of batches
-    assert mlc < nc, 'Label class %g exceeds nc=%g in %s. Possible class labels are 0-%g' % (mlc, nc, opt.data, nc - 1)
+    assert mlc < nc, f'Label class {mlc} exceeds nc={nc} in {data}. Possible class labels are 0-{nc - 1}'
 
     # Process 0
     if rank in [-1, 0]:
-        testloader = create_dataloader(test_path, imgsz_test, batch_size * 2, gs, opt,  # testloader
-                                       hyp=hyp, cache=opt.cache_images and not opt.notest, rect=True, rank=-1,
-                                       world_size=opt.world_size, workers=opt.workers,
-                                       pad=0.5, prefix=colorstr('val: '))[0]
+        testloader = create_dataloader(val_path, imgsz, batch_size // WORLD_SIZE * 2, gs, names, single_cls,
+                                       hyp=hyp, cache=None if noval else opt.cache, rect=True, rank=-1,
+                                       workers=workers, pad=0.5,
+                                       prefix=colorstr('val: '))[0]
 
         if not opt.resume:
-            labels = np.concatenate(dataset.labels, 0)
-            c = torch.tensor(labels[:, 0])  # classes
+            labels = np.concatenate(dataset.labels, 0) # labels(array): (all_images_gt_num, [cls_id, poly])
+            # c = torch.tensor(labels[:, 0])  # classes
             # cf = torch.bincount(c.long(), minlength=nc) + 1.  # frequency
             # model._initialize_biases(cf.to(device))
             if plots:
-                #plot_labels(labels, names, save_dir, loggers)
-                if tb_writer:
-                    tb_writer.add_histogram('classes', c, 0)
+                plot_labels(labels, names, save_dir, imgsz)
+                #if tb_writer:
+                    #tb_writer.add_histogram('classes', c, 0)
 
             # Anchors
             if not opt.noautoanchor:
                 check_anchors(dataset, model=model, thr=hyp['anchor_t'], imgsz=imgsz)
             model.half().float()  # pre-reduce anchor precision
 
+        callbacks.run('on_pretrain_routine_end')
+            
     # DDP mode
     if cuda and rank != -1:
         model = DDP(model, device_ids=[opt.local_rank], output_device=opt.local_rank,
