@@ -35,6 +35,15 @@ def set_logging(rank=-1):
         format="%(message)s",
         level=logging.INFO if rank in [-1, 0] else logging.WARN)
 
+def set_logging2(name=None, verbose=True):
+    # Sets level and returns logger
+    for h in logging.root.handlers:
+        logging.root.removeHandler(h)  # remove all handlers associated with the root logger object
+    rank = int(os.getenv('RANK', -1))  # rank in world for Multi-GPU trainings
+    logging.basicConfig(format="%(message)s", level=logging.INFO if (verbose and rank in (-1, 0)) else logging.WARNING)
+    return logging.getLogger(name)
+
+LOGGER = set_logging2(__name__)  # define globally (used in train.py, val.py, detect.py, etc.)
 
 def init_seeds(seed=0):
     # Initialize random number generator (RNG) seeds
