@@ -21,7 +21,7 @@ $ git clone https://github.com/worldstar/yolov7-obb.git
 $ cd yolov7-obb/
 $ pip install -r requirements.txt
 
-$ %cd utils/nms_rotated
+$ cd utils/nms_rotated
 $ python setup.py develop  #or "pip install -v -e ."
 
 $ cd ../
