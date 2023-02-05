@@ -10,15 +10,15 @@ We obtain some codes from the following authors.
 * <a href='https://github.com/open-mmlab/mmrotate/blob/6519a3654e17b707c15d4aa2c5db1257587ea4c0/mmrotate/models/losses/kf_iou_loss.py'>KFIoU in MMRotate</a>
 * <a href='https://github.com/hukaixuan19970627/yolov5_obb'>YOLOv5-CSL</a>
 
-## How to train the YOLOv7-OBB?
+## Quick Start
 
 ```
 $ pip3 install torch==1.10.1+cu113 torchvision==0.11.2+cu113 torchaudio==0.10.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
 $ nvcc -V
 $ nvidia-smi
 
-$ git clone https://github.com/worldstar/yolov7-obb/yolov7-obb.git
-$ cd ./yolov7-obb/
+$ git clone https://github.com/worldstar/yolov7-obb.git
+$ cd yolov7-obb/
 $ pip install -r requirements.txt
 
 $ %cd utils/nms_rotated
