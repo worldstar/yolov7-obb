@@ -26,7 +26,7 @@ $ python setup.py develop  #or "pip install -v -e ."
 
 $ cd ../
 $ wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
-$ python train.py --data ./dataset/Aerial-Airport-1/data.yaml --weights yolov7.pt --epochs 20 --batch-size 8 --img 1024 --device 0 --exist-ok
+$ python train.py --data ./dataset/Aerial-Airport-1/data.yaml --mode KLD --weights yolov7.pt --epochs 20 --batch-size 8 --img 1024 --device 0 --exist-ok
 ```
 
 ## Datasets
