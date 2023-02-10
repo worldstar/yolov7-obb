@@ -490,9 +490,9 @@ def parse_opt(known=False):
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='yolo7.pt', help='initial weights path')
     parser.add_argument('--cfg', type=str, default='', help='model.yaml path')
-    parser.add_argument('--data', type=str, default='dataset/coco.yaml', help='data.yaml path')
+    parser.add_argument('--data', type=str, default='/content/yolov7-obb/dataset/roboflow/data.yaml', help='data.yaml path')
     #be sure to check the hyperparameter source
-    parser.add_argument('--hyp', type=str, default='dataset/hyp.scratch.obb.yaml', help='hyperparameters path')
+    parser.add_argument('--hyp', type=str, default='/content/yolov7-obb/dataset/hyp.scratch.obb.ota.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=300)
     parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs')
     parser.add_argument('--img-size', nargs='+', type=int, default=[640, 640], help='[train, test] image sizes')
