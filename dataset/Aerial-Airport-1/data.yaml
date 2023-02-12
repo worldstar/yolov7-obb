@@ -1,4 +1,4 @@
-path: ../datasets/Aerial-Airport-1
+path: ../datasets/roboflow
 
 train: train/images
 val: valid/images
