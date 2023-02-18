@@ -1,56 +1,40 @@
-# YOLOv7_obb
-Rotating object detection using YOLOv7 and CSL.
+# YOLOv7 with Oriented Bounding Box
+This respository employs the YOLOv7 as the backbone and work with KFIoU, KLD, and CSL in the loss function.
 
+## Credits
+We obtain some codes from the following authors.
 
-### 项目用途
-使用YOLOv7和CSL实现旋转目标检测，在DOTA数据集和HRSC2016数据集上均取得良好结果。
-（train_ota.py未上传）
+* <a href='https://github.com/WongKinYiu/yolov7'>YOLOv7</a>
+* <a href='https://github.com/SSTato/YOLOv7_obb'>YOLOv7-CSL</a>
+* <a href='https://github.com/lx-cly/YOLOv7_OBB'>YOLOv7-KLD</a>
+* <a href='https://github.com/open-mmlab/mmrotate/blob/6519a3654e17b707c15d4aa2c5db1257587ea4c0/mmrotate/models/losses/kf_iou_loss.py'>KFIoU in MMRotate</a>
+* <a href='https://github.com/hukaixuan19970627/yolov5_obb'>YOLOv5-CSL</a>
 
-### 效果展示
-<details>
-  <summary>DOTA数据集HBB(0.791) (click to expand)</summary>
+## Quick Start
 
-<p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/results1.png"></p>
-<p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/confusion_matrix.png"></p>
-<p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/val_batch0_pred.jpg"></p>
-</details>
+```
+$ pip3 install torch==1.10.1+cu113 torchvision==0.11.2+cu113 torchaudio==0.10.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+$ nvcc -V
+$ nvidia-smi
 
+$ git clone https://github.com/worldstar/yolov7-obb.git
+$ cd yolov7-obb/
+$ pip install -r requirements.txt
 
-<details>
-  <summary>DOTA数据集OBB(val) (0.7835) (click to expand)</summary>
-  <br>
-<p>mAP:78.35</p>
-<p>class aps:  [90.56903172 80.70941623 46.04763298 59.882317   80.20104153 87.27336943
- 89.98862253 90.8265387  84.66325542 89.90289903 76.64386534 74.47407929
- 76.2255546  67.98867669 79.85177155]</p>
-</details>
+$ cd utils/nms_rotated
+$ python setup.py develop  #or "pip install -v -e ."
 
-<details>
-  <summary>DOTA数据集OBB(test) (0.7840) (click to expand)</summary>
-  <br>
-<p>mAP:78.39785536928188</p>
-  <p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/Task1.png"></p>
-  <p> 结果链接：https://drive.google.com/file/d/1i8mkKTJhfpilW6XEC02rPGTx_IOfo5pI/view?usp=sharing </p>
+$ cd ../../
+$ wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
+$ python train.py --data ./dataset/Aerial-Airport-1/data.yaml --mode KLD --weights yolov7.pt --epochs 20 --batch-size 8 --img 1024 --device 0 --exist-ok --name YOLOv7-KLD
+```
 
-</details>
+## Datasets
+* <a href='https://captain-whu.github.io/DOTA/dataset.html'>DOTA</a>
+* <a href='https://paperswithcode.com/dataset/dota'>Paper with code</a>
 
-<details>
-  <summary>HRSC2016数据集HBB(0.942) (click to expand)</summary>
-<p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/results.png"></p>
-<p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/val_batch2_pred.jpg"></p>
-</details>
-
-<details>
-  <summary>HRSC2016数据集OBB(0.959) (click to expand)</summary>
-<p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/labels_correlogram.jpg"></p>
-<p align="left"><img width="800" src="https://github.com/SSTato/YOLOv7_obb/blob/master/dataset/dataset_demo/labels_xyls.jpg"></p>
-</details>
-
-### 文件下载
-
-
-<details>
-  <summary>模型文件可在谷歌网盘中下载 (click to expand)</summary>
-<p> 链接：https://drive.google.com/file/d/1bodl7IoA1xaqP-b9RXDvRUv6oSxNySP3/view?usp=sharing </p>
-<p> 链接：https://drive.google.com/file/d/1SLrafWiaoYzgjq9KlXuKr_-wn7-5Zbj2/view?usp=sharing </p>
-</details>
+## Labeling tool
+* <a href='https://rectlabel.com/'>RectLabel</a>
+* <a href='https://labelbox.com/'>LabelBox</a>
+* <a href='https://github.com/heartexlabs/labelImg'>LabelImg</a>
+* <a href='https://public.roboflow.com/object-detection'>Roboflow</a>
