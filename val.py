@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
 """
 Validate a trained YOLOv5 model accuracy on a custom dataset
@@ -33,6 +34,7 @@ from utils.general import (LOGGER, box_iou, check_dataset, check_img_size, check
 from utils.metrics import ConfusionMatrix, ap_per_class
 from utils.plots import output_to_target, plot_images, plot_val_study
 from utils.torch_utils import select_device, time_sync
+from utils.optsave import loadname
 
 
 def save_one_txt(predn, save_conf, shape, file):
@@ -277,6 +279,10 @@ def run(data,
     # Print results
     pf = '%20s' + '%11i' * 2 + '%11.3g' * 4  # print format
     LOGGER.info(pf % ('all', seen, nt.sum(), mp, mr, map50, map))
+    lnamepkl = loadname()
+    writefilestr = str(lnamepkl + "Output.txt")
+    with open(writefilestr, "w") as text_file:
+        text_file.write("mAP_50:" + str(map50) + "mAP_50:95:" + str(map) + "\n") 
 
     # Print results per class
     if (verbose or (nc < 50 and not training)) and nc > 1 and len(stats):
