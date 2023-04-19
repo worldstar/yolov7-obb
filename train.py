@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
 """
 Train a YOLOv5 model on a custom dataset
@@ -23,7 +24,7 @@ from torch.cuda import amp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.optim import SGD, Adam, AdamW, lr_scheduler
 from tqdm import tqdm
-from utils.optsave import savevar, loadvar, savevardet, loadvardet, savevarang, loadvarang
+from utils.optsave import savevar, loadvar, savevardet, loadvardet, savevarang, loadvarang, savename, loadname
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
@@ -85,6 +86,10 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
     smodeang = opt.angmode
     savevarang(smodeang)
     lmodeang = loadvarang()
+    
+    snamepkl = opt.name
+    savename(snamepkl)
+    lnamepkl = loadname()
 
     # Directories
     w = save_dir / 'weights'  # weights dir
