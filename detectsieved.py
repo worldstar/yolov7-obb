@@ -68,6 +68,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         detectmode='DETECT', # enabled detect mode
         mode='KLD',
         angmode='LE90',
+        nclz=4, # maximum number of classes, default is 4 #added on 2023.7.17
         ):
     source = str(source)
     save_img = not nosave and not source.endswith('.txt')  # save inference images
