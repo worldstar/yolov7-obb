@@ -501,7 +501,7 @@ def parse_opt(known=False):
     parser.add_argument('--epochs', type=int, default=300)
     parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs')
     # parser.add_argument('--img-size', nargs='+', type=int, default=[640, 640], help='[train, test] image sizes')
-    parser.add_argument('--img-size', '--imgsz', '--img', nargs='+', type=int, default=640, help='train, val, [train, test] image size (pixels)')
+    parser.add_argument('--imgsz', '--img-size', '--img', type=int, default=640, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
     parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')
     parser.add_argument('--nosave', action='store_true', help='only save final checkpoint')
@@ -520,7 +520,7 @@ def parse_opt(known=False):
     parser.add_argument('--optimizer', type=str, choices=['SGD', 'Adam', 'AdamW'], default='adam', help='optimizer')
     parser.add_argument('--sync-bn', action='store_true', help='use SyncBatchNorm, only available in DDP mode')
     parser.add_argument('--local_rank', type=int, default=-1, help='DDP parameter, do not modify')
-    parser.add_argument('--workers', type=int, default=8, help='maximum number of dataloader workers')
+    parser.add_argument('--workers', type=int, default=4, help='maximum number of dataloader workers')
     parser.add_argument('--project', default='runs/train', help='save to project/name')
     parser.add_argument('--name', default='exp', help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
@@ -533,7 +533,7 @@ def parse_opt(known=False):
     parser.add_argument('--freeze', nargs='+', type=int, default=[0], help='Freeze layers: backbone of yolov7=50, first3=0 1 2')
     # parser.add_argument('--v5-metric', action='store_true', help='assume maximum recall as 1.0 in AP calculation')
     parser.add_argument('--mode', type=str, choices=['KLD', 'KFIOU', 'CSL'], default='KLD', help='Bbox Loss mode')
-    parser.add_argument('--angmode', type=str, choices=['OOCV', 'LE90'], default='LE90', help='Bbox Loss mode')
+    parser.add_argument('--angmode', type=str, choices=['OOCV', 'LE90'], default='LE90', help='Bbox Angular mode')
     # parser.add_argument('--detectmode', type=str, choices=['TRAIN', 'DETECT'], default='TRAIN', help='enable or disable detect mode')
 
     # Weights & Biases arguments

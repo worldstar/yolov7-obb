@@ -154,7 +154,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             if isinstance(det,list):
                 det2 = det[0]
                 #print(det2.size())
-            pred_poly = rbox2poly(det[:, :5]) # (n, [x1 y1 x2 y2 x3 y3 x4 y4])
+            pred_poly = rbox2poly(det2[:, :5]) # (n, [x1 y1 x2 y2 x3 y3 x4 y4])
             seen += 1
             if webcam:  # batch_size >= 1
                 p, im0, frame = path[i], im0s[i].copy(), dataset.count
@@ -169,25 +169,25 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
-            if len(det):
+            if len(det2):
                 # Rescale polys from img_size to im0 size
                 # det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
                 pred_poly = scale_polys(im.shape[2:], pred_poly, im0.shape)
                 #print(pred_poly.size())
-                det = torch.cat((pred_poly, det[:, -2:]), dim=1) # (n, [poly conf cls])
+                det2 = torch.cat((pred_poly, det2[:, -2:]), dim=1) # (n, [poly conf cls])
 
                 # Print results
-                for c in det[:, -1].unique():
-                    n = (det[:, -1] == c).sum()  # detections per class
+                for c in det2[:, -1].unique():
+                    n = (det2[:, -1] == c).sum()  # detections per class
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
                 # Sieve results, added on 2023.07.17
-                det = sievealg(det, nclz) #calls the sieving algorithm
-                print('after sieving, the det.size is:')
-                print(det.size())
+                det2 = sievealg(det2, nclz) #calls the sieving algorithm
+                print('after sieving, the det2.size is:')
+                print(det2.size())
 
                 # Write results
-                for *poly, conf, cls in reversed(det):
+                for *poly, conf, cls in reversed(det2):
                     if save_txt:  # Write to file
                         # xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         # poly = poly.tolist()
@@ -248,7 +248,7 @@ def parse_opt():
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[495, 700], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.1, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.4, help='NMS IoU threshold')
-    parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
+    parser.add_argument('--max-det', type=int, default=100, help='maximum detections per image')
     parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--view-img', action='store_true', help='show results')
     parser.add_argument('--save-txt', action='store_true', help='save results to *.txt')
