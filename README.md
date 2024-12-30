@@ -9,6 +9,8 @@ We obtain some codes from the following authors.
 * <a href='https://github.com/lx-cly/YOLOv7_OBB'>YOLOv7-KLD</a>
 * <a href='https://github.com/open-mmlab/mmrotate/blob/6519a3654e17b707c15d4aa2c5db1257587ea4c0/mmrotate/models/losses/kf_iou_loss.py'>KFIoU in MMRotate</a>
 * <a href='https://github.com/hukaixuan19970627/yolov5_obb'>YOLOv5-CSL</a>
+* <a href='https://github.com/Egrt/yolov7-obb/tree/master'>A recent repo of YOLOv7-3D</a>
+
 
 ## Quick Start
 
